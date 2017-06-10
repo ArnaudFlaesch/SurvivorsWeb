@@ -1,0 +1,13 @@
+build:
+    dependencies:
+        before:
+            - npm install -g mocha istanbul
+    environment:
+            node: '6.9'
+
+checks:
+    javascript: true
+
+filter:
+    excluded_paths:
+        - node_modules/
