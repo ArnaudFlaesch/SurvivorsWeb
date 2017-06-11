@@ -4,13 +4,14 @@
 
 window.jQuery = require("jquery");
 window.jQuery.ajaxSetup({ async:false });
-const $ = require("jquery");
+const $ = require("jquery"),
+    userModel = require("../model/user");
 
 const API_URL = "http://localhost:3000";
 
 var httpService = {
 
-    loggedUser : {},
+    loggedUser : userModel,
 
     login : function (login, password) {
         var dataUser = null;

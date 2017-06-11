@@ -41,9 +41,11 @@ gulp.task("build-game", function() {
     var bundleStream =
         browserify([
             "./src/js/game.js",
-            "./src/js/services/service.js",
-            "./src/js/states/registerState.js",
+            "./src/js/model/user.js",
+            "./src/js/services/httpService.js",
+            "./src/js/services/socketService.js",
             "./src/js/states/loginState.js",
+            "./src/js/states/registerState.js",
             "./src/js/states/gameState.js"
         ])
         .bundle()
