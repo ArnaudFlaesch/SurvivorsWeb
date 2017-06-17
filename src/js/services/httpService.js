@@ -2,45 +2,45 @@
  * Created by Arnaud on 27/05/2017.
  */
 
+"use strict";
+
 window.jQuery = require("jquery");
-window.jQuery.ajaxSetup({ async:false });
-const $ = require("jquery"),
-    userModel = require("../model/user");
+window.jQuery.ajaxSetup({"async": false});
 
-const API_URL = "http://localhost:3000";
+const $ = require("jquery");
 
-var httpService = {
+const API_URL = "http://localhost:3000",
 
-    loggedUser : userModel,
+    httpService = {
 
-    login : function (login, password) {
-        var dataUser = null;
-        $.post(API_URL + "/user/login",
-            {
-                _nickname: login,
-                _password: password
-            },
-            function (data) {
-                dataUser = data;
-            }, "text"
-        );
-        return (dataUser);
-    },
+        login: function (login, password) {
+            let dataUser = null;
+            $.post(API_URL + "/user/login",
+                {
+                    "_nickname": login,
+                    "_password": password
+                },
+                function (data) {
+                    dataUser = data;
+                }, "text"
+            );
+            return (dataUser);
+        },
 
-    register : function (email, login, password) {
-        var dataUser = null;
-        $.post(API_URL + "/user/register",
-            {
-                _email: email,
-                _nickname: login,
-                _password: password
-            },
-            function (data) {
-                dataUser = data;
-            }, "text"
-        );
-        return (dataUser);
-    }
+        register: function (email, login, password) {
+            let dataUser = null;
+            $.post(API_URL + "/user/register",
+                {
+                    "_email": email,
+                    "_nickname": login,
+                    "_password": password
+                },
+                function (data) {
+                    dataUser = data;
+                }, "text"
+            );
+            return (dataUser);
+        }
 };
 
 module.exports = httpService;

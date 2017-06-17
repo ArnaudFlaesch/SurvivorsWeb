@@ -3,6 +3,7 @@ const browserify = require("browserify"),
     browserSync = require("browser-sync"),
     buffer = require("vinyl-buffer"),
     del = require("del"),
+    eslint = require("gulp-eslint"),
     gulp = require("gulp"),
     gutil = require("gulp-util"),
     jshint = require("gulp-jshint"),
@@ -81,7 +82,21 @@ gulp.task("serve", function() {
     });
 
     gulp.watch([paths.index], ["build-index"]);
-    gulp.watch([paths.js.src, "./*.js"], ["build-game", "jshint"]);
+    gulp.watch([paths.js.src, "./*.js"], ["build-game", "jshint", "lint"]);
+});
+
+gulp.task("lint", () => {
+    return gulp.src([
+        "./src/js/game.js",
+        "./src/js/model/user.js",
+        "./src/js/services/httpService.js",
+        "./src/js/services/socketService.js",
+        "./src/js/states/loginState.js",
+        "./src/js/states/registerState.js",
+        "./src/js/states/gameState.js"
+    ])
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 gulp.task("jshint", function () {
@@ -105,6 +120,7 @@ gulp.task("dev", function() {
     runSequence(
         ["clean"],
         ["copy"],
+        ["lint"],
         ["jshint"],
         ["build"],
         ["serve"]

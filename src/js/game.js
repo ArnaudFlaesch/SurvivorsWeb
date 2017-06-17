@@ -1,13 +1,14 @@
+"use strict";
+
 window.PIXI = require("phaser/build/custom/pixi");
 window.p2 = require("phaser/build/custom/p2");
 
-
-const Phaser = require("phaser"),
+const gameState = require("./states/gameState"),
     loginState = require("./states/loginState"),
-    registerState = require("./states/registerState"),
-    gameState = require("./states/gameState");
+    registerState = require("./states/registerState");
 
-var game = new Phaser.Game(
+
+const game = new Phaser.Game(
     window.innerWidth - 20,
     window.innerHeight - 20,
     Phaser.AUTO,

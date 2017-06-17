@@ -2,25 +2,25 @@
  * Created by Arnaud on 27/05/2017.
  */
 
-const socketService = require("../services/socketService"),
-    userModel = require("../model/user");
+"use strict";
 
-const spriteSize = 40,
-    playerSpeed = 20;
+window.Phaser = require("phaser");
 
-var player, cursors, platforms, walls, bag, map, layer;
+const socketService = require("../services/socketService");
+const playerSpeed = 20;
+
+var bag, layer, map, player;
 
 var gameState = {};
 
-socketService.socket.on("playerLoggedIn", function(data) {
-    console.log("socket data "+data);
+socketService.socket.on("playerLoggedIn", function (data) {
     gameState.addPlayerToMap(data);
 });
 
 gameState.user = {};
 
-gameState.init  = function(userData) {
-    this.user = userData;
+gameState.init  = function (userData) {
+    this.user= userData;
 };
 
 gameState.preload = function () {
@@ -56,8 +56,8 @@ gameState.create = function () {
 
     this.game.camera.follow(player);
 
-    cursors = this.game.input.keyboard.createCursorKeys();
-    cursors = this.game.input.keyboard.addKeys([Phaser.Keyboard.Z, Phaser.Keyboard.Q, Phaser.Keyboard.D, Phaser.Keyboard.S]);
+    this.game.input.keyboard.createCursorKeys();
+    this.game.input.keyboard.addKeys([Phaser.Keyboard.Z, Phaser.Keyboard.Q, Phaser.Keyboard.D, Phaser.Keyboard.S]);
 };
 
 gameState.update = function () {
@@ -65,6 +65,7 @@ gameState.update = function () {
         player.animations.play("up");
         player.y -= playerSpeed;
     }
+
     else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN) || this.game.input.keyboard.isDown(Phaser.Keyboard.S)) {
         player.animations.play("down");
         player.y += playerSpeed;
@@ -74,17 +75,19 @@ gameState.update = function () {
         player.animations.play("left");
         player.x -= playerSpeed;
     }
+
     else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) || this.game.input.keyboard.isDown(Phaser.Keyboard.D)) {
         player.animations.play("right");
         player.x += playerSpeed;
     }
+
     else {
         player.animations.stop();
         player.frame = 4;
     }
 };
 
-gameState.addPlayerToMap = function(data) {
+gameState.addPlayerToMap = function (data) {
     this.game.add.sprite(data.positionX, data.positionY, "player");
 };
 
