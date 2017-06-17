@@ -1,14 +1,15 @@
 
-const browserify = require("browserify");
-const browserSync = require("browser-sync");
-const buffer = require("vinyl-buffer");
-const del = require("del");
-const gulp = require("gulp");
-const gutil = require("gulp-util");
-const jshint = require("gulp-jshint");
-const runSequence = require("run-sequence");
-const reload = browserSync.reload;
-const source = require("vinyl-source-stream");
+const browserify = require("browserify"),
+    browserSync = require("browser-sync"),
+    buffer = require("vinyl-buffer"),
+    del = require("del"),
+    gulp = require("gulp"),
+    gutil = require("gulp-util"),
+    jshint = require("gulp-jshint"),
+    nodemon = require("gulp-nodemon"),
+    runSequence = require("run-sequence"),
+    reload = browserSync.reload,
+    source = require("vinyl-source-stream");
 
 const sourceDir = "./src";
 const buildDir = "./build";
@@ -89,16 +90,32 @@ gulp.task("jshint", function () {
         .pipe(jshint.reporter("default"));
 });
 
+gulp.task("server", function () {
+    nodemon({
+        script: "./server.js",
+        stdout: true
+    });
+});
+
 gulp.task("copy", ["copy-assets", "copy-phaser-input"]);
 
 gulp.task("build", ["build-index", "build-game"]);
 
-gulp.task("default", function() {
+gulp.task("dev", function() {
     runSequence(
         ["clean"],
         ["copy"],
         ["jshint"],
         ["build"],
         ["serve"]
+    );
+});
+
+gulp.task("prod", function() {
+    runSequence(
+        ["clean"],
+        ["copy"],
+        ["build"],
+        ["server"]
     );
 });
