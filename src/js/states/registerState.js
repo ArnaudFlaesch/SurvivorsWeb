@@ -5,7 +5,7 @@
 "use strict";
 
 const httpService = require("../services/httpService");
-var emailInput, loginInput, passwordInput;
+let emailInput, loginInput, passwordInput;
 
 const registerState = {
     "preload": function () {
@@ -15,15 +15,15 @@ const registerState = {
     },
 
     "create": function () {
-        this.emailInput = this.game.add.inputField(this.game.world.centerX, 60, {
+        emailInput = this.game.add.inputField(this.game.world.centerX, 60, {
             "placeHolder": "Adresse mail",
             "type": Fabrique.InputType.text
         });
-        this.loginInput = this.game.add.inputField(this.game.world.centerX, 80, {
+        loginInput = this.game.add.inputField(this.game.world.centerX, 80, {
             "placeHolder": "Login",
             type: Fabrique.InputType.text
         });
-        this.passwordInput = this.game.add.inputField(this.game.world.centerX, 100, {
+        passwordInput = this.game.add.inputField(this.game.world.centerX, 100, {
             placeHolder: "Mot de passe",
             type: Fabrique.InputType.password
         });

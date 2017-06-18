@@ -3,7 +3,8 @@
 window.PIXI = require("phaser/build/custom/pixi");
 window.p2 = require("phaser/build/custom/p2");
 
-const gameState = require("./states/gameState"),
+const Phaser = require("phaser"),
+    gameState = require("./states/gameState"),
     loginState = require("./states/loginState"),
     registerState = require("./states/registerState");
 

@@ -4,23 +4,18 @@
 
 "use strict";
 
-window.Phaser = require("phaser");
-
 const socketService = require("../services/socketService");
 const playerSpeed = 20;
 
 var bag, layer, map, player;
 
-var gameState = {};
-
-socketService.socket.on("playerLoggedIn", function (data) {
-    gameState.addPlayerToMap(data);
-});
+const gameState = {};
 
 gameState.user = {};
 
 gameState.init  = function (userData) {
-    this.user= userData;
+    gameState.user = JSON.parse(userData);
+    socketService.initListeners();
 };
 
 gameState.preload = function () {
@@ -45,9 +40,11 @@ gameState.create = function () {
     bag.fixedToCamera = true;
     bag.events.onInputUp.add(this.displayBagContents);
 
-    player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "player");
-    socketService.playerLoggedIn(this.game.world.centerX, this.game.world.centerY);
+    player = this.game.add.sprite(this.user._positionX, this.user._positionY, "player");
+    socketService.playerLoggedIn(this.user._nickname, this.user._positionX, this.user._positionY);
     this.game.physics.enable(player, Phaser.Physics.ARCADE);
+
+    player.enableBody;
     player.body.collideWorldBounds = true;
     player.animations.add("up", [6, 7, 8], 10, true);
     player.animations.add("left", [0, 1, 2], 10, true);
@@ -62,33 +59,37 @@ gameState.create = function () {
 
 gameState.update = function () {
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP) || this.game.input.keyboard.isDown(Phaser.Keyboard.Z)) {
+        this.user._positionY = player.y - playerSpeed;
+        socketService.movePlayer(this.user._nickname, this.user._positionX, this.user._positionY);
+        player.y = this.user._positionY;
         player.animations.play("up");
-        player.y -= playerSpeed;
     }
 
     else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN) || this.game.input.keyboard.isDown(Phaser.Keyboard.S)) {
+        this.user._positionY = player.y + playerSpeed;
+        socketService.movePlayer(this.user._nickname, this.user._positionX, this.user._positionY);
+        player.y = this.user._positionY;
         player.animations.play("down");
-        player.y += playerSpeed;
     }
 
     else if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT) || this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
+        this.user._positionX = player.x - playerSpeed;
+        socketService.movePlayer(this.user._nickname, this.user._positionX, this.user._positionY);
+        player.x = this.user._positionX;
         player.animations.play("left");
-        player.x -= playerSpeed;
     }
 
     else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) || this.game.input.keyboard.isDown(Phaser.Keyboard.D)) {
+        this.user._positionX = player.x + playerSpeed;
+        socketService.movePlayer(this.user._nickname, this.user._positionX, this.user._positionY);
+        player.x = this.user._positionX;
         player.animations.play("right");
-        player.x += playerSpeed;
     }
 
     else {
         player.animations.stop();
         player.frame = 4;
     }
-};
-
-gameState.addPlayerToMap = function (data) {
-    this.game.add.sprite(data.positionX, data.positionY, "player");
 };
 
 gameState.displayBagContents = function () {

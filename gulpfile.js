@@ -85,7 +85,7 @@ gulp.task("serve", function() {
     gulp.watch([paths.js.src, "./*.js"], ["build-game", "jshint", "lint"]);
 });
 
-gulp.task("lint", () => {
+gulp.task("lint", function () {
     return gulp.src([
         "./src/js/game.js",
         "./src/js/model/user.js",
